@@ -1,28 +1,26 @@
 document.addEventListener('DOMContentLoaded', function () {
+  const emailInput = document.querySelector('input[name="email"]');
+  const messageInput = document.querySelector('textarea[name="message"]');
+
   const storedData = localStorage.getItem('feedback-form-state');
   if (storedData) {
     const { email, message } = JSON.parse(storedData);
 
     if (email !== undefined) {
-      document.querySelector('input[name="email"]').value = email;
+      emailInput.value = email;
     }
     if (message !== undefined) {
-      document.querySelector('textarea[name="message"]').value = message;
+      messageInput.value = message;
     }
   }
 
   document
     .querySelector('.feedback-form')
     .addEventListener('input', function (event) {
-      if (
-        event.target.tagName === 'INPUT' ||
-        event.target.tagName === 'TEXTAREA'
-      ) {
+      if (event.target === emailInput || event.target === messageInput) {
         const formData = {
-          email: document.querySelector('input[name="email"]').value.trim(),
-          message: document
-            .querySelector('textarea[name="message"]')
-            .value.trim(),
+          email: emailInput.value.trim(),
+          message: messageInput.value.trim(),
         };
         localStorage.setItem('feedback-form-state', JSON.stringify(formData));
       }
@@ -33,12 +31,8 @@ document.addEventListener('DOMContentLoaded', function () {
     .addEventListener('submit', function (event) {
       event.preventDefault();
 
-      const emailValue = document
-        .querySelector('input[name="email"]')
-        .value.trim();
-      const messageValue = document
-        .querySelector('textarea[name="message"]')
-        .value.trim();
+      const emailValue = emailInput.value.trim();
+      const messageValue = messageInput.value.trim();
 
       if (emailValue && messageValue) {
         console.log({
@@ -47,20 +41,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         localStorage.removeItem('feedback-form-state');
-        document.querySelector('input[name="email"]').value = '';
-        document.querySelector('textarea[name="message"]').value = '';
+        emailInput.value = '';
+        messageInput.value = '';
       }
-    });
-
-  document
-    .querySelector('.feedback-form')
-    .addEventListener('input', function (event) {
-      const formData = {
-        email: document.querySelector('input[name="email"]').value.trim(),
-        message: document
-          .querySelector('textarea[name="message"]')
-          .value.trim(),
-      };
-      localStorage.setItem('feedback-form-state', JSON.stringify(formData));
     });
 });
